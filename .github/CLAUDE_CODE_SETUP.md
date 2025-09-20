@@ -4,10 +4,21 @@ This repository is configured with the Claude Code GitHub Action to provide AI a
 
 ## How It Works
 
-The Claude Code GitHub Action is triggered when you mention `@claude-code` in:
-- Issue descriptions or comments
-- Pull request descriptions or comments
-- Pull request review comments
+Claude Code operates in two modes:
+
+### 🤖 Automatic PR Monitoring (Always On)
+- **Automatically reviews ALL pull requests** when they are:
+  - Opened
+  - Edited
+  - Updated with new commits
+  - Marked as ready for review
+- Provides code review feedback and suggestions without manual triggers
+
+### 💬 Manual Assistance (On Demand)
+- Triggered by mentioning `@claude-code` in:
+  - Issue descriptions or comments
+  - Pull request review comments
+  - For specific questions or implementation help
 
 ## Setup Requirements
 
@@ -22,7 +33,14 @@ To enable the Claude Code GitHub Action, you need to add your Anthropic API key 
 
 ## Usage Examples
 
-### In Issues
+### Automatic PR Reviews (No action needed!)
+Every PR will automatically receive:
+- Code quality review
+- Security considerations
+- Performance suggestions
+- Best practices feedback
+
+### In Issues (Manual)
 ```markdown
 I need help implementing a login feature. @claude-code can you help me create:
 1. A login form component
