@@ -1,14 +1,14 @@
-name: Claude Code AI Assistant
+name: Claude Code AI Assistant (Manual Only)
 
 on:
-  pull_request:
-    types: [opened, edited, synchronize, ready_for_review]
-  pull_request_review_comment:
-    types: [created, edited]
-  issue_comment:
-    types: [created, edited]
   issues:
     types: [opened, edited]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, edited, synchronize]
+  pull_request_review_comment:
+    types: [created, edited]
 
 permissions:
   contents: write
@@ -17,26 +17,14 @@ permissions:
   actions: read
 
 jobs:
-  # Automatic PR monitoring - runs on all PRs
-  auto-review-pr:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Claude Code Auto Review
-        uses: anthropics/claude-code-github-action@v1
-        with:
-          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          mode: review
-          auto-review: true
-
-  # Manual trigger - only when @claude-code is mentioned
-  manual-assist:
+  claude-code:
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'issues' && contains(github.event.issue.body, '@claude-code')) ||
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude-code')) ||
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.body, '@claude-code')) ||
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude-code'))
+
     steps:
       - name: Claude Code Assistant
         uses: anthropics/claude-code-github-action@v1
