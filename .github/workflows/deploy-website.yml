@@ -1,0 +1,55 @@
+name: Deploy Website to Vercel
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'website/**' ]
+  pull_request:
+    branches: [ main ]
+    paths: [ 'website/**' ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'website/package-lock.json'
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./website
+
+    - name: Run linting
+      run: npm run lint
+      working-directory: ./website
+
+    - name: Build application
+      run: npm run build
+      working-directory: ./website
+
+    - name: Deploy to Vercel (Production)
+      uses: amondnet/vercel-action@v25
+      if: github.ref == 'refs/heads/main'
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./website
+        vercel-args: '--prod'
+
+    - name: Deploy to Vercel (Preview)
+      uses: amondnet/vercel-action@v25
+      if: github.event_name == 'pull_request'
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./website
