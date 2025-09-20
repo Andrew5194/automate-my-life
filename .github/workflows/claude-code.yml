@@ -31,5 +31,3 @@ jobs:
         with:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          co-author-name: "Andrew5194"
-          co-author-email: "Andrew5194@users.noreply.github.com"

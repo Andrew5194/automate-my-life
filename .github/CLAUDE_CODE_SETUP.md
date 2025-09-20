@@ -46,15 +46,13 @@ I need help implementing a login feature. @claude-code can you help me create:
 - ✅ **Implementation Help**: Assistance with feature development
 - ✅ **Bug Fixes**: Help identifying and fixing issues
 - ✅ **Best Practices**: Suggestions for code improvements
-- ✅ **Co-Authoring**: All commits will be co-authored with your GitHub account
 
-## Co-Authoring
+## Authoring
 
-All commits made by Claude Code will include co-authoring with:
-- **Primary Author**: Claude Code
-- **Co-Author**: Andrew5194 (your GitHub account)
+Commits made by Claude Code via GitHub Actions will be authored by:
+- **Author**: Claude Code (github-actions bot)
 
-This ensures proper attribution while maintaining the AI assistance workflow.
+Co-authoring with your GitHub account is only configured for local commits made through Claude Code CLI, not for GitHub Action commits.
 
 ## Permissions
 
