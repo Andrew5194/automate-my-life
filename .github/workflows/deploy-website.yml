@@ -19,7 +19,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'  # Updated to Node 20 LTS
         cache: 'npm'
         cache-dependency-path: 'website/package-lock.json'
 
@@ -35,22 +35,33 @@ jobs:
       run: npm run build
       working-directory: ./website
 
-    - name: Deploy to Vercel (Production)
-      uses: amondnet/vercel-action@v25
-      if: github.ref == 'refs/heads/main'
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./website
-        vercel-args: '--prod'
+    - name: Install Vercel CLI
+      run: npm install --global vercel@latest
 
-    - name: Deploy to Vercel (Preview)
-      uses: amondnet/vercel-action@v25
+    - name: Pull Vercel Environment Information
+      run: vercel pull --yes --environment=${{ github.event_name == 'pull_request' && 'preview' || 'production' }} --token=${{ secrets.VERCEL_TOKEN }}
+      working-directory: ./website
+
+    - name: Build Project Artifacts
+      run: vercel build ${{ github.event_name == 'pull_request' && '' || '--prod' }} --token=${{ secrets.VERCEL_TOKEN }}
+      working-directory: ./website
+
+    - name: Deploy to Vercel
+      id: deploy
+      run: |
+        url=$(vercel deploy --prebuilt ${{ github.event_name == 'pull_request' && '' || '--prod' }} --token=${{ secrets.VERCEL_TOKEN }})
+        echo "url=$url" >> $GITHUB_OUTPUT
+        echo "Deployed to: $url"
+      working-directory: ./website
+
+    - name: Comment PR with Preview URL
       if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
       with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./website
-        vercel-args: ''
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `✅ Preview deployment ready!\n\n🔗 **Preview URL**: ${{ steps.deploy.outputs.url }}`
+          })
