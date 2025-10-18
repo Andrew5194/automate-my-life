@@ -1,0 +1,96 @@
+name: Track Repository Traffic
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch traffic data
+        id: traffic
+        run: |
+          # Fetch views data
+          VIEWS=$(gh api repos/${{ github.repository }}/traffic/views)
+          echo "$VIEWS" > views.json
+
+          # Fetch clones data
+          CLONES=$(gh api repos/${{ github.repository }}/traffic/clones)
+          echo "$CLONES" > clones.json
+
+          # Create timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%d")
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.TRAFFIC_PAT }}
+
+      - name: Store traffic data
+        run: |
+          # Create traffic data directory if it doesn't exist
+          mkdir -p .github/traffic-data
+
+          # Create CSV file with headers if it doesn't exist
+          CSV_FILE=".github/traffic-data/traffic-history.csv"
+          if [ ! -f "$CSV_FILE" ]; then
+            echo "date,views,unique_visitors,clones,unique_cloners" > "$CSV_FILE"
+          fi
+
+          # Extract all daily view entries and append to CSV
+          jq -r '.views[] | [.timestamp[0:10], .count, .uniques] | @csv' views.json | while IFS=',' read -r date views uniques; do
+            # Remove quotes from jq CSV output
+            date=$(echo $date | tr -d '"')
+
+            # Check if this date already exists in CSV
+            if ! grep -q "^${date}," "$CSV_FILE" 2>/dev/null; then
+              # Get clones data for this date (default to 0 if not found)
+              clones=$(jq -r --arg date "${date}T00:00:00Z" '.clones[] | select(.timestamp == $date) | .count // 0' clones.json)
+              unique_cloners=$(jq -r --arg date "${date}T00:00:00Z" '.clones[] | select(.timestamp == $date) | .uniques // 0' clones.json)
+
+              # Default to 0 if no clones data found
+              clones=${clones:-0}
+              unique_cloners=${unique_cloners:-0}
+
+              # Append to CSV
+              echo "${date},${views},${uniques},${clones},${unique_cloners}" >> "$CSV_FILE"
+            fi
+          done
+
+          # Also check for clone-only entries (days with clones but no views)
+          jq -r '.clones[] | [.timestamp[0:10], .count, .uniques] | @csv' clones.json | while IFS=',' read -r date clones uniques; do
+            date=$(echo $date | tr -d '"')
+
+            # Only add if date doesn't already exist
+            if ! grep -q "^${date}," "$CSV_FILE" 2>/dev/null; then
+              echo "${date},0,0,${clones},${uniques}" >> "$CSV_FILE"
+            fi
+          done
+
+          # Sort CSV by date (keeping header)
+          (head -n 1 "$CSV_FILE" && tail -n +2 "$CSV_FILE" | sort) > "$CSV_FILE.tmp"
+          mv "$CSV_FILE.tmp" "$CSV_FILE"
+
+          # Clean up temp files
+          rm views.json clones.json
+
+      - name: Commit traffic data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/traffic-data/
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update traffic data - $(date -u +"%Y-%m-%d")"
+            git push
+          fi
