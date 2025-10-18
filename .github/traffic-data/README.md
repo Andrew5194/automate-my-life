@@ -38,17 +38,41 @@ date,views,unique_visitors,clones,unique_cloners
 
 The `track-traffic.yml` workflow runs daily at midnight UTC and:
 1. Fetches current traffic data from GitHub API
-2. Stores snapshots with timestamps
-3. Updates the latest summary
+2. Extracts daily metrics for each day
+3. Appends new days to the CSV (avoiding duplicates)
 4. Commits changes to the repository
 
 GitHub only retains 14 days of traffic data, so this workflow archives it for long-term analysis.
 
+## Setup Required
+
+**Create a Personal Access Token (PAT):**
+
+1. Go to GitHub Settings → [Developer settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens)
+2. Click **Generate new token (classic)**
+3. Name it: `Traffic Data Access`
+4. Set expiration: Choose your preference (recommend: No expiration or 1 year)
+5. Select scopes:
+   - ✅ `repo` (Full control of private repositories)
+     - This includes access to traffic data
+6. Click **Generate token**
+7. Copy the token immediately (you won't see it again!)
+
+**Add the token to your repository:**
+
+1. Go to your repository → Settings → Secrets and variables → Actions
+2. Click **New repository secret**
+3. Name: `TRAFFIC_PAT`
+4. Value: Paste your token
+5. Click **Add secret**
+
+The workflow will now be able to access traffic data.
+
 ## Automation
 
 - **Scheduled**: Runs automatically every day at 00:00 UTC
-- **Manual**: Can be triggered manually from the Actions tab
+- **Manual**: Can be triggered manually from the Actions tab (workflow_dispatch)
 
 ## Privacy
 
-All data comes from GitHub's public traffic API and contains no personal information about visitors.
+All data comes from GitHub's traffic API and contains no personal information about visitors.
