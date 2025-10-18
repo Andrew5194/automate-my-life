@@ -32,3 +32,5 @@ automate-my-life/
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
+
+Test
