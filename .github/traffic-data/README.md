@@ -2,43 +2,37 @@
 
 This folder contains historical traffic data for the repository, automatically collected daily.
 
-## Data Files
+## Data File
 
-- `views-YYYY-MM-DD.json` - Daily snapshot of repository views
-- `clones-YYYY-MM-DD.json` - Daily snapshot of repository clones
-- `latest-summary.json` - Most recent combined stats
+**`traffic-history.csv`** - Cumulative historical traffic data
 
-## Data Structure
+### CSV Structure
 
-### Views Data
-```json
-{
-  "count": 162,
-  "uniques": 1,
-  "views": [
-    {
-      "timestamp": "2025-10-18T00:00:00Z",
-      "count": 162,
-      "uniques": 1
-    }
-  ]
-}
+| Column | Description |
+|--------|-------------|
+| `date` | Date (YYYY-MM-DD) |
+| `views` | Repository views on that specific day |
+| `unique_visitors` | Unique visitors on that specific day |
+| `clones` | Repository clones on that specific day |
+| `unique_cloners` | Unique cloners on that specific day |
+
+### Example Data
+
+```csv
+date,views,unique_visitors,clones,unique_cloners
+2025-10-18,162,1,33,17
+2025-10-19,45,2,5,3
+2025-10-20,38,1,8,5
+2025-10-21,52,3,7,4
+2025-10-22,41,2,6,3
 ```
 
-### Clones Data
-```json
-{
-  "count": 37,
-  "uniques": 20,
-  "clones": [
-    {
-      "timestamp": "2025-10-18T00:00:00Z",
-      "count": 33,
-      "uniques": 17
-    }
-  ]
-}
-```
+**Note:**
+- Each row represents metrics for that specific day only (not cumulative)
+- The workflow runs daily and extracts all available daily data from GitHub's API
+- GitHub API provides up to 14 days of daily breakdowns
+- On first run, it will backfill available historical data from the past 14 days
+- Subsequent runs add only new days that don't already exist in the CSV
 
 ## How It Works
 
