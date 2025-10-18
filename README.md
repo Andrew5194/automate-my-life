@@ -1,5 +1,7 @@
 # Automate My Life 🤖
 
+[![GPL-3.0 License](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
+
 A repository for automating daily tasks and workflows using modern tools and technologies.
 
 ## 📁 Project Structure
@@ -51,4 +53,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+GNU General Public License v3.0 - see [LICENSE](LICENSE) file for details.

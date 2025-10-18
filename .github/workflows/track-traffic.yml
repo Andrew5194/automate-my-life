@@ -1,0 +1,73 @@
+name: Track Repository Traffic
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch traffic data
+        id: traffic
+        run: |
+          # Fetch views data
+          VIEWS=$(gh api repos/${{ github.repository }}/traffic/views)
+          echo "$VIEWS" > views.json
+
+          # Fetch clones data
+          CLONES=$(gh api repos/${{ github.repository }}/traffic/clones)
+          echo "$CLONES" > clones.json
+
+          # Create timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%d")
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Store traffic data
+        run: |
+          # Create traffic data directory if it doesn't exist
+          mkdir -p .github/traffic-data
+
+          # Save data with timestamp
+          TIMESTAMP="${{ steps.traffic.outputs.timestamp }}"
+
+          # Save views
+          cp views.json ".github/traffic-data/views-${TIMESTAMP}.json"
+
+          # Save clones
+          cp clones.json ".github/traffic-data/clones-${TIMESTAMP}.json"
+
+          # Create a summary file with latest stats
+          cat > .github/traffic-data/latest-summary.json << 'SUMMARY'
+          {
+            "last_updated": "'"${TIMESTAMP}"'",
+            "views": $(cat views.json),
+            "clones": $(cat clones.json)
+          }
+          SUMMARY
+
+          # Clean up temp files
+          rm views.json clones.json
+
+      - name: Commit traffic data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/traffic-data/
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update traffic data - $(date -u +"%Y-%m-%d")"
+            git push
+          fi
