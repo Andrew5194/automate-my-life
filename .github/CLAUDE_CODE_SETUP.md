@@ -4,10 +4,15 @@ This repository is configured with the Claude Code GitHub Action to provide AI a
 
 ## How It Works
 
-The Claude Code GitHub Action is triggered when you mention `@claude-code` in:
-- Issue descriptions or comments
-- Pull request descriptions or comments
-- Pull request review comments
+Claude Code operates in **manual-only mode** to control costs:
+
+### 💬 Manual Assistance (Cost-Effective)
+- Only triggered when you mention `@claude` in:
+  - Issue descriptions or comments
+  - Pull request descriptions or comments
+  - Pull request review comments
+- **You control when it runs** = You control costs
+- Perfect for targeted help when you need it
 
 ## Setup Requirements
 
@@ -22,9 +27,9 @@ To enable the Claude Code GitHub Action, you need to add your Anthropic API key 
 
 ## Usage Examples
 
-### In Issues
+### In PRs (Manual - Cost Controlled)
 ```markdown
-I need help implementing a login feature. @claude-code can you help me create:
+I need help implementing a login feature. @claude can you help me create:
 1. A login form component
 2. Authentication logic
 3. User session management
@@ -32,12 +37,12 @@ I need help implementing a login feature. @claude-code can you help me create:
 
 ### In Pull Requests
 ```markdown
-@claude-code please review this code and suggest improvements for performance and security.
+@claude please review this code and suggest improvements for performance and security.
 ```
 
 ### In Comments
 ```markdown
-@claude-code can you help me fix the TypeScript errors in this file?
+@claude can you help me fix the TypeScript errors in this file?
 ```
 
 ## Features
@@ -65,7 +70,20 @@ The Claude Code action has the following permissions:
 ## Getting Started
 
 1. Add your `ANTHROPIC_API_KEY` secret (see Setup Requirements above)
-2. Create an issue or PR and mention `@claude-code` with your request
+2. Create an issue or PR and mention `@claude` with your request
 3. Claude Code will respond with assistance and can make commits if needed
 
-The action is now ready to use! Simply mention `@claude-code` in any issue or PR to get AI assistance.
+## 💰 Cost Management
+
+This setup is designed to be cost-effective:
+
+- **Manual triggers only** - No automatic reviews that could drain tokens
+- **Targeted assistance** - Only ask for help when you need it
+- **Specific requests** - Be clear about what you want to minimize token usage
+
+### Cost-Saving Tips:
+- Use `@claude` sparingly for complex issues only
+- Ask specific questions rather than "review everything"
+- Consider using Claude Code CLI locally for frequent tasks
+
+The action is now ready to use! Simply mention `@claude` in any issue or PR to get AI assistance.
