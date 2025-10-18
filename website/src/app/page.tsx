@@ -30,12 +30,12 @@ export default function Home() {
             Creating beautiful, fast, and scalable web applications using the latest technologies
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+            <a href="#contact" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center">
               Get Started
-            </button>
-            <button className="border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 px-8 py-3 rounded-lg font-semibold transition-colors">
+            </a>
+            <a href="#portfolio" className="border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 px-8 py-3 rounded-lg font-semibold transition-colors text-center">
               View Portfolio
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -49,7 +49,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-slate-50 dark:bg-slate-700 p-8 rounded-xl">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Code icon" role="img">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
               </div>
@@ -58,7 +58,7 @@ export default function Home() {
             </div>
             <div className="bg-slate-50 dark:bg-slate-700 p-8 rounded-xl">
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Server icon" role="img">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
                 </svg>
               </div>
@@ -67,7 +67,7 @@ export default function Home() {
             </div>
             <div className="bg-slate-50 dark:bg-slate-700 p-8 rounded-xl">
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
-                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Cloud deployment icon" role="img">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                 </svg>
               </div>
@@ -103,9 +103,9 @@ export default function Home() {
           <p className="text-xl text-blue-100 mb-8">
             Let&apos;s build something amazing together. Contact us today for a free consultation.
           </p>
-          <button className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold transition-colors">
+          <a href="https://github.com/Andrew5194" target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-semibold transition-colors">
             Get In Touch
-          </button>
+          </a>
         </div>
       </section>
 
@@ -127,9 +127,9 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <p className="text-slate-400">info@digitalsolutionspro.com</p>
-              <p className="text-slate-400">+1 (555) 123-4567</p>
+              <h4 className="font-semibold mb-4">Connect</h4>
+              <a href="https://github.com/Andrew5194" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors block">GitHub</a>
+              <a href="https://github.com/Andrew5194/automate-my-life" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors block mt-2">Repository</a>
             </div>
           </div>
           <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
