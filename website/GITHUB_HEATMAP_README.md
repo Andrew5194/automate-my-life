@@ -18,36 +18,40 @@ This feature adds a GitHub-style contribution heatmap to your website with advan
 
 ## Setup
 
-### 1. Replace Username
+### 1. Local Development
 
-In [page.tsx](src/app/page.tsx#L186), replace `YOUR_GITHUB_USERNAME` with your actual GitHub username:
+Edit `.env.local` and set your GitHub username:
 
-```tsx
-<GitHubHeatmap username="your-username-here" />
+```bash
+NEXT_PUBLIC_GITHUB_USERNAME=your-actual-username
+GITHUB_TOKEN=your_github_token_here  # Optional, or use your existing TRAFFIC_PAT
 ```
 
-### 2. (Optional) Add GitHub Token
+### 2. Production Deployment (Vercel)
 
-For higher rate limits and private contribution data, you can provide a GitHub Personal Access Token:
+The code is already configured to use your existing `TRAFFIC_PAT` secret in production.
+
+**Environment Variables needed on Vercel:**
+- `NEXT_PUBLIC_GITHUB_USERNAME` - Your GitHub username (public)
+- `TRAFFIC_PAT` - Your existing GitHub token (already configured)
+
+The component will automatically use `TRAFFIC_PAT` if `GITHUB_TOKEN` is not set:
 
 ```tsx
-<GitHubHeatmap username="your-username" token="your-github-token" />
+token={process.env.GITHUB_TOKEN || process.env.TRAFFIC_PAT}
 ```
 
-**To create a GitHub token:**
+### 3. GitHub Token Scopes
+
+Your `TRAFFIC_PAT` should have the `read:user` scope for accessing public contribution data.
+
+**To verify or create a new token:**
 1. Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Click "Generate new token (classic)"
 3. Select scopes: `read:user` (for public data only)
-4. Copy the token and store it securely
+4. Copy the token and store it securely in Vercel environment variables
 
-**Important**: Never commit tokens to your repository! Use environment variables:
-
-```tsx
-<GitHubHeatmap
-  username={process.env.NEXT_PUBLIC_GITHUB_USERNAME}
-  token={process.env.GITHUB_TOKEN}
-/>
-```
+**Important**: Never commit tokens to your repository! `.env.local` is already in `.gitignore`
 
 ## Files Structure
 
