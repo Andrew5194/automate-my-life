@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Digital Solutions Pro - Modern Web Development",
-  description: "Professional web development services specializing in modern technologies like React, Next.js, and cloud deployment.",
+  title: "Automate My Life - Intelligent Automation Solutions",
+  description: "Transform your workflow with AI-powered automation. Streamline tasks, boost productivity, and reclaim your time with intelligent automation solutions.",
 };
 
 export default function RootLayout({
