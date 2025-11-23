@@ -2,8 +2,6 @@
  * GitHub API module for fetching contribution data
  */
 
-const GITHUB_API = 'https://api.github.com';
-
 export interface ContributionDay {
   date: string;
   count: number;
@@ -16,67 +14,24 @@ export interface ContributionData {
 }
 
 /**
- * Fetches contribution data using GitHub's GraphQL API
+ * Fetches contribution data via Next.js API route (server-side)
+ * This ensures the GitHub token stays secure on the server
  * @param username - GitHub username
- * @param token - GitHub personal access token (optional but recommended)
  * @returns Contribution data
  */
 export async function fetchContributions(
   username: string,
-  token?: string
+  _token?: string // Token parameter kept for compatibility but not used (handled server-side)
 ): Promise<ContributionData> {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  const query = `
-    query($username: String!) {
-      user(login: $username) {
-        contributionsCollection {
-          contributionCalendar {
-            totalContributions
-            weeks {
-              contributionDays {
-                contributionCount
-                date
-                weekday
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const response = await fetch(`${GITHUB_API}/graphql`, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify({
-      query: query,
-      variables: { username }
-    })
-  });
+  const response = await fetch(`/api/github-contributions?username=${encodeURIComponent(username)}`);
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
   }
 
-  const data = await response.json();
-
-  if (data.errors) {
-    throw new Error(data.errors[0].message);
-  }
-
-  if (!data.data || !data.data.user) {
-    throw new Error('User not found');
-  }
-
-  return parseContributionData(data.data.user.contributionsCollection.contributionCalendar);
+  const calendar = await response.json();
+  return parseContributionData(calendar);
 }
 
 interface GraphQLDay {
