@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import GitHubHeatmap from './components/GitHubHeatmap';
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
@@ -41,7 +42,7 @@ export default function Home() {
             </div>
             <div className="hidden md:flex space-x-8">
               <a href="#platform" className="text-gray-300 hover:text-white transition-colors">Platform</a>
-              <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a>
+              <a href="#github-activity" className="text-gray-300 hover:text-white transition-colors">Activity</a>
               <a href="#tech" className="text-gray-300 hover:text-white transition-colors">Technology</a>
               <a href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</a>
             </div>
@@ -167,6 +168,22 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* GitHub Activity Section */}
+      <section id="github-activity" className="relative z-10 py-32 px-6 bg-gradient-to-b from-transparent via-cyan-900/5 to-transparent">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">
+              Development <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Activity</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Track our continuous development and contributions to the open source ecosystem
+            </p>
+          </div>
+
+          <GitHubHeatmap username="YOUR_GITHUB_USERNAME" />
         </div>
       </section>
 
