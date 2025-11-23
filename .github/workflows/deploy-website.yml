@@ -38,19 +38,20 @@ jobs:
     - name: Deploy to Vercel (Production)
       uses: amondnet/vercel-action@v25
       if: github.ref == 'refs/heads/main'
+      working-directory: ./website
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        vercel-args: '--prod --cwd ./website'
+        vercel-args: '--prod'
         github-comment: false
 
     - name: Deploy to Vercel (Preview)
       uses: amondnet/vercel-action@v25
       if: github.event_name == 'pull_request'
+      working-directory: ./website
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        vercel-args: '--cwd ./website'
         github-comment: true
