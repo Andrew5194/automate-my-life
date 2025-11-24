@@ -1,4 +1,4 @@
-# AML - Master Your Time ⚡
+# AML - Automate My Life ⚡
 
 A productivity platform designed to help you take control of your time, amplify your impact, and focus on what truly matters.
 
