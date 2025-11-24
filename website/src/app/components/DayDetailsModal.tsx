@@ -76,7 +76,7 @@ interface DayDetailsModalProps {
 
 type CategoryType = 'commits' | 'prs' | 'issues' | 'reviews' | null;
 
-export default function DayDetailsModal({ username, date, contributionCount, onClose }: DayDetailsModalProps) {
+export default function DayDetailsModal({ username, date, onClose }: DayDetailsModalProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [details, setDetails] = useState<DayDetails | null>(null);

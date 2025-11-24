@@ -2,6 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const GITHUB_API = 'https://api.github.com';
 
+interface GitHubRepository {
+  owner: { login: string };
+  name: string;
+}
+
+interface RepoContribution {
+  repository: GitHubRepository;
+}
+
+interface GitHubCommit {
+  sha: string;
+  commit: {
+    message: string;
+    author: { date: string };
+  };
+  html_url: string;
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const username = searchParams.get('username');
@@ -153,7 +171,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch detailed commit information for each repository
     const commitDetails = await Promise.all(
-      contributionsData.commitContributionsByRepository.map(async (repo: any) => {
+      contributionsData.commitContributionsByRepository.map(async (repo: RepoContribution) => {
         try {
           // Fetch commits for this repository on the specific date
           const commitsUrl = `${GITHUB_API}/repos/${repo.repository.owner.login}/${repo.repository.name}/commits`;
@@ -169,10 +187,10 @@ export async function GET(request: NextRequest) {
             };
           }
 
-          const commits = await commitsResponse.json();
+          const commits = await commitsResponse.json() as GitHubCommit[];
           return {
             repository: repo.repository,
-            commits: commits.map((commit: any) => ({
+            commits: commits.map((commit: GitHubCommit) => ({
               sha: commit.sha.substring(0, 7),
               message: commit.commit.message,
               url: commit.html_url,
