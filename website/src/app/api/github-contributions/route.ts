@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const token = process.env.GITHUB_TOKEN || process.env.TRAFFIC_PAT;
+  const token = process.env.GITHUB_TOKEN;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',

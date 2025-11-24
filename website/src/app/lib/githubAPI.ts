@@ -21,6 +21,7 @@ export interface ContributionData {
  */
 export async function fetchContributions(
   username: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _token?: string // Token parameter kept for compatibility but not used (handled server-side)
 ): Promise<ContributionData> {
   const response = await fetch(`/api/github-contributions?username=${encodeURIComponent(username)}`);

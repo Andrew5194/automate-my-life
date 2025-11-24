@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Automate My Life - Intelligent Automation Solutions",
-  description: "Transform your workflow with AI-powered automation. Streamline tasks, boost productivity, and reclaim your time with intelligent automation solutions.",
+  title: "AML - Master Your Time, Amplify Your Impact",
+  description: "Transform how you work with intelligent productivity tools. Focus on what matters most, track your progress, and reclaim hours every week with smart workflows.",
 };
 
 export default function RootLayout({
