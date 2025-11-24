@@ -210,7 +210,6 @@ export default function Home() {
 
           <GitHubHeatmap
             username={process.env.NEXT_PUBLIC_GITHUB_USERNAME || "YOUR_GITHUB_USERNAME"}
-            token={process.env.GITHUB_TOKEN}
           />
         </div>
       </section>
