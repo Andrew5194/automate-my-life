@@ -56,7 +56,7 @@ export default function Home() {
               <a href="#platform" className="text-gray-300 hover:text-white transition-colors">Platform</a>
               <a href="#github-activity" className="text-gray-300 hover:text-white transition-colors">Activity</a>
               <a href="#tech" className="text-gray-300 hover:text-white transition-colors">Technology</a>
-              <a href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</a>
+              <a href="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</a>
             </div>
             <div className="hidden md:flex items-center gap-3">
               <a
