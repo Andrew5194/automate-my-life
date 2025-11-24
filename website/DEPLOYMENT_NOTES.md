@@ -2,51 +2,54 @@
 
 ## For Production (Vercel)
 
-The heatmap is configured to use your existing `TRAFFIC_PAT` secret automatically.
+### 🔧 Environment Variables Required:
 
-### ✅ Already Configured:
-- Code uses `TRAFFIC_PAT` as fallback token
-- `.env.local` is gitignored
-- Component handles authentication properly
-
-### 🔧 What You Need to Do:
-
-1. **Add Environment Variable to Vercel:**
+1. **Add these to Vercel:**
    - Go to your Vercel project settings
    - Navigate to: Settings → Environment Variables
-   - Add: `NEXT_PUBLIC_GITHUB_USERNAME` = `your-actual-username`
-   - `TRAFFIC_PAT` should already be configured
+   - Add the following:
+     - `NEXT_PUBLIC_GITHUB_USERNAME` = `Andrew5194`
+     - `GITHUB_TOKEN` = `your-github-token` (with `read:user` scope)
 
-2. **Redeploy** (if needed)
-   - Vercel will automatically pick up the new environment variable
-   - Or trigger a manual redeploy
+2. **Redeploy:**
+   - Vercel will automatically redeploy when you push changes
+   - Or trigger a manual redeploy from the Vercel dashboard
+
+### ✅ Security Features:
+- `.env.local` is gitignored (tokens never committed)
+- Token is only used server-side via API route
+- Client never has access to the token
 
 ## For Local Development
 
 1. **Edit `.env.local`:**
    ```bash
-   NEXT_PUBLIC_GITHUB_USERNAME=your-actual-username
-   GITHUB_TOKEN=your_token_or_traffic_pat
+   NEXT_PUBLIC_GITHUB_USERNAME=Andrew5194
+   GITHUB_TOKEN=your_github_token_here
    ```
 
-2. **Restart dev server:**
+2. **Create a GitHub Token:**
+   - Go to: https://github.com/settings/tokens
+   - Generate new token (classic)
+   - Select scopes:
+     - `read:user` (for contribution calendar)
+     - `repo` (for accessing repository activity details when clicking on days)
+   - Copy and paste into `.env.local`
+
+3. **Restart dev server:**
    ```bash
    node_modules/.bin/next dev -p 3000
    ```
 
-## Token Fallback Priority
+## How It Works
 
-The code tries tokens in this order:
-1. `GITHUB_TOKEN` (local dev)
-2. `TRAFFIC_PAT` (production)
-
-```tsx
-token={process.env.GITHUB_TOKEN || process.env.TRAFFIC_PAT}
-```
+The GitHub API calls are made server-side via `/api/github-contributions`:
+- ✅ Client calls `/api/github-contributions?username=Andrew5194`
+- ✅ API route uses `GITHUB_TOKEN` from environment
+- ✅ Token stays secure on the server
+- ✅ No rate limit issues (5,000 requests/hour with token)
 
 ## Rate Limits
 
-- **Without token**: 60 requests/hour (will hit rate limit quickly)
-- **With token**: 5,000 requests/hour (plenty for production)
-
-Your `TRAFFIC_PAT` should handle this perfectly in production!
+- **Without token**: 60 requests/hour (not enough)
+- **With token**: 5,000 requests/hour ✅
