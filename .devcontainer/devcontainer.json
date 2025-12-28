@@ -9,6 +9,9 @@
 			"auth": "none",
 			"port": 13337
 		},
+		"./filebrowser": {
+			"folder": "${containerWorkspaceFolder}"
+		}
 	},
 	// SYS_PTRACE to enable go debugging
 	"runArgs": ["--cap-add=SYS_PTRACE"],
